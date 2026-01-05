@@ -33,4 +33,19 @@ do
   ((GUESS_COUNT++))
 
   # Check if integer
- 
+  if [[ ! $GUESS =~ ^[0-9]+$ ]]
+  then
+    echo "That is not an integer, guess again:"
+  elif [[ $GUESS -eq $SECRET_NUMBER ]]
+  then
+    # Win condition
+    echo "You guessed it in $GUESS_COUNT tries. The secret number was $SECRET_NUMBER. Nice job!"
+    INSERT_GAME_RESULT=$($PSQL "INSERT INTO games(user_id, guesses) VALUES($USER_ID, $GUESS_COUNT)")
+    break
+  elif [[ $GUESS -gt $SECRET_NUMBER ]]
+  then
+    echo "It's lower than that, guess again:"
+  else
+    echo "It's higher than that, guess again:"
+  fi
+done
